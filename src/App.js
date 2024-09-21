@@ -6,7 +6,7 @@ import LoadingBar from 'react-top-loading-bar';
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import About from './components/About';
 
-const apiKey = 'd08a3aef70da391683150e0adcfb1ec1'
+const apiKey = 'df9df73dff60e256c72a8b6c4e163f5f'
 const country = 'in'
 // process.env.MY_REACT_APP_API;
 
