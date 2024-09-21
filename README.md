@@ -1,4 +1,4 @@
-## NewsPulse
+### NewsPulse
 
 ## Overview
 **NewsPulse** is a modern news aggregation platform built with React. It aims to provide users with the latest news stories in a clean and intuitive interface. The app uses Bootstrap for responsive design, ensuring an enjoyable user experience across devices.
