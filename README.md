@@ -16,7 +16,7 @@ The app is deployed on Vercel at ( https://thenewspulse.vercel.app/ )
 - **Hosting:** Vercel
 
 ## Current Issues
-- The API used for fetching news has a limit of **100 requests per day**, which may restrict the availability of news updates. This can be resolved by purchasing a monthly plan, but as a student, I currently don't have plans for that.
+- The API used for fetching news has a limit of few requests, which may restrict the availability of news updates. This can be resolved by purchasing a monthly plan, but as a student, I currently don't have plans for that.
 - After loading **10-12 news items** in the unlimited scroller, the news starts to repeat, affecting the user experience.
 
 ## Screenshots
