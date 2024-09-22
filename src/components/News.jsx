@@ -23,7 +23,10 @@ const News = (props) => {
 
     // let url =`https://newsapi.org/v2/top-headlines?country=${props.country}&category=${props.category}&apiKey=${props.apiKey}&page=1&pageSize=${props.pgSize}`;
     let data = await fetch(url);
-
+    if (data.status === 429) { // If rate limit is reached
+      props.switchApiKey();    // Switch to the next API key
+      return;
+    }
     props.setProgress(30);
 
     let parsedData = await data.json();
@@ -36,18 +39,22 @@ const News = (props) => {
 
     props.setProgress(100);
   }
-
-  useEffect(()=>{
-    document.title=`NewsPulse | ${capitalizeFirstLetter(props.category)}`;
+  
+  useEffect(() => {
+    document.title = `NewsPulse | ${capitalizeFirstLetter(props.category)}`;
     updateNews();
-  },[])
+  }, [props.apiKey]); // Re-run the effect when apiKey changes
 
   const fetchMoreData = async () => {
-    setPage(page+1);
+    setPage(page + 1);
 
     let url = `https://gnews.io/api/v4/top-headlines?category=${props.category}&lang=en&country=${props.country}&apikey=${props.apiKey}&page=${props.page}&pageSize=${props.pgSize}`;
     // let url =`https://newsapi.org/v2/top-headlines?country=${props.country}&category=${props.category}&apiKey=${props.apiKey}&page=${page}&pageSize=${props.pgSize}`;
     let data = await fetch(url);
+    if (data.status === 429) {
+      props.switchApiKey();
+      return;
+    }
     let parsedData = await data.json();
     console.log(parsedData)
 
@@ -56,36 +63,36 @@ const News = (props) => {
     setLoading(false);
   };
 
-    return (
-      <div className='container pt-10 py-4'>
-        
-        <h2 className="text-center " style={{marginTop:"4rem",padding:"0.9rem 0 1rem"}}>Top Headlines - {capitalizeFirstLetter(props.category)} </h2>
-        {/* {loading ? <Spinner />:""} */}
-        <InfiniteScroll
-          dataLength={articles.length}
-          next={fetchMoreData}
-          hasMore={articles !== totalArticles}
-          loader={<Spinner />}
-        >
-          <div className="container">
-            <div className="row">
-              {articles.map((element) => {
-                return <div className="col-md-4 " key={element.url}>
-                  <NewItem
-                    title={element.title ? element.title.slice(0, 67) : "No title available"}
-                    description={element.description ? element.description.slice(0, 75) : "No description available"}
-                    imageUrl={element.image}
-                    newsUrl={element.url}
-                    date={element.publishedAt}
-                    source={element.source.name}
-                  />
-                </div>
-              })}
-            </div>
+  return (
+    <div className='container pt-10 py-4'>
+
+      <h2 className="text-center " style={{ marginTop: "4rem", padding: "0.9rem 0 1rem" }}>Top Headlines - {capitalizeFirstLetter(props.category)} </h2>
+      {/* {loading ? <Spinner />:""} */}
+      <InfiniteScroll
+        dataLength={articles.length}
+        next={fetchMoreData}
+        hasMore={articles !== totalArticles}
+        loader={<Spinner />}
+      >
+        <div className="container">
+          <div className="row">
+            {articles.map((element) => {
+              return <div className="col-md-4 " key={element.url}>
+                <NewItem
+                  title={element.title ? element.title.slice(0, 67) : "No title available"}
+                  description={element.description ? element.description.slice(0, 75) : "No description available"}
+                  imageUrl={element.image}
+                  newsUrl={element.url}
+                  date={element.publishedAt}
+                  source={element.source.name}
+                />
+              </div>
+            })}
           </div>
-        </InfiniteScroll>
-      </div>
-    )
+        </div>
+      </InfiniteScroll>
+    </div>
+  )
 }
 
 export default News;
