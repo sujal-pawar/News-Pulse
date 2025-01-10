@@ -16,7 +16,8 @@ The app is deployed on Vercel at ( https://thenewspulse.vercel.app/ )
 - **Hosting:** Vercel
 
 ## Current Issues
-- The .env file contains API keys required for the project. You can also create your own API keys by signing up on [GNews]([https://gnews.io/docs/](https://gnews.io/)). Make sure to handle sensitive data securely in production.
+
+- The `.env` file contains API keys required for the project. You can also create your own API keys by signing up on [GNews](https://gnews.io/docs/). Make sure to handle sensitive data securely in production.
 - The API used for fetching news has a limit of few requests, which may restrict the availability of news updates. This can be resolved by purchasing a monthly plan, but as a student, I currently don't have plans for that.
 - After loading **10-12 news items** in the unlimited scroller, the news starts to repeat, affecting the user experience.
 
