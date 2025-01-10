@@ -5,15 +5,15 @@ import News from "./components/News";
 import LoadingBar from 'react-top-loading-bar';
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import About from './components/About';
+import Footer from './components/Footer';
 
 // List of API keys
 const apiKeys = [
-  'ea245eaf28ad968432fdb625b8d10d86',
-  '5be38465a4ba959a7dccd73bd8f99c4d',
-  'd08a3aef70da391683150e0adcfb1ec1',
-  'df9df73dff60e256c72a8b6c4e163f5f'
+  process.env.REACT_APP_API_KEY_1,
+  process.env.REACT_APP_API_KEY_2,
+  process.env.REACT_APP_API_KEY_3,
+  process.env.REACT_APP_API_KEY_4
 ];
-const apiKey = 'ea245eaf28ad968432fdb625b8d10d86'
 const country = 'in'
 // process.env.MY_REACT_APP_API;
 

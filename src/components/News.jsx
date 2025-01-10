@@ -88,6 +88,9 @@ const News = (props) => {
                 />
               </div>
             })}
+            <div className='fixed-bottom p-5 d-flex justify-content-end '>
+              <button >hello</button>
+            </div>
           </div>
         </div>
       </InfiniteScroll>
