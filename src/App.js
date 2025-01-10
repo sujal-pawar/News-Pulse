@@ -14,8 +14,8 @@ const apiKeys = [
   process.env.REACT_APP_API_KEY_3,
   process.env.REACT_APP_API_KEY_4
 ];
+
 const country = 'in'
-// process.env.MY_REACT_APP_API;
 
 const App=(props)=> {
 
@@ -29,7 +29,7 @@ const App=(props)=> {
     setProgress(props.progress);
   },[props.progress])
   // setProgress(props.progress);
-
+  // console.log(apiKeys[currentApiKeyIndex]);
   return (
       <div>
         <Router>
