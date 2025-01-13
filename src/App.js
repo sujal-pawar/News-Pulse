@@ -29,7 +29,7 @@ const App=(props)=> {
     setProgress(props.progress);
   },[props.progress])
   // setProgress(props.progress);
-  // console.log(apiKeys[currentApiKeyIndex]);
+  
   return (
       <div>
         <Router>

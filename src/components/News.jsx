@@ -56,7 +56,7 @@ const News = (props) => {
       return;
     }
     let parsedData = await data.json();
-    console.log(parsedData)
+    // console.log(parsedData)
 
     setArticles(articles.concat(parsedData.articles));
     settotalArticles(parsedData.totalArticles);
