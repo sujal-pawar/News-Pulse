@@ -25,11 +25,11 @@ const News = (props) => {
       // Check if we're in development (localhost) or production (Vercel)
       if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
         // Local development - use direct GNews API
-        url = `https://gnews.io/api/v4/top-headlines?category=${props.category}&lang=en&country=${props.country}&apikey=${props.apiKey}&page=${props.page}&pageSize=${props.pgSize}`;
+        url = `https://gnews.io/api/v4/top-headlines?category=${props.category}&lang=en&country=${props.country}&apikey=${props.apiKey}&page=${page}&pageSize=${props.pgSize}`;
         console.log('Local development - using direct GNews API');
       } else {
         // Production (Vercel) - use internal API endpoint
-        url = `/api/news?category=${props.category}&country=${props.country}&page=${props.page}&pageSize=${props.pgSize}&apiKeyIndex=${props.apiKeyIndex || 0}`;
+        url = `/api/news?category=${props.category}&country=${props.country}&page=${page}&pageSize=${props.pgSize}&apiKeyIndex=${props.apiKeyIndex || 0}`;
         console.log('Production - using Vercel API endpoint:', url);
       }
       
