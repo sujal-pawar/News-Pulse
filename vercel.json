@@ -1,0 +1,8 @@
+{
+  "functions": {
+    "api/news.js": {
+      "maxDuration": 10
+    }
+  },
+  "regions": ["all"]
+}
