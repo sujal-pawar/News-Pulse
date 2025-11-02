@@ -48,8 +48,7 @@ const News = (props) => {
   const fetchMoreData = async () => {
     setPage(page + 1);
 
-    let url = `https://gnews.io/api/v4/top-headlines?category=${props.category}&lang=en&country=${props.country}&apikey=${props.apiKey}&page=${props.page}&pageSize=${props.pgSize}`;
-    // let url =`https://newsapi.org/v2/top-headlines?country=${props.country}&category=${props.category}&apiKey=${props.apiKey}&page=${page}&pageSize=${props.pgSize}`;
+    let url = `https://gnews.io/api/v4/top-headlines?category=${props.category}&lang=en&country=${props.country}&apikey=${props.apiKey}&page=${page + 1}&pageSize=${props.pgSize}`;
     let data = await fetch(url);
     if (data.status === 403) {
       props.switchApiKey();
