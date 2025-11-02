@@ -26,30 +26,52 @@ const News = (props) => {
       if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
         // Local development - use direct GNews API
         url = `https://gnews.io/api/v4/top-headlines?category=${props.category}&lang=en&country=${props.country}&apikey=${props.apiKey}&page=${props.page}&pageSize=${props.pgSize}`;
+        console.log('Local development - using direct GNews API');
       } else {
         // Production (Vercel) - use internal API endpoint
         url = `/api/news?category=${props.category}&country=${props.country}&page=${props.page}&pageSize=${props.pgSize}&apiKeyIndex=${props.apiKeyIndex || 0}`;
+        console.log('Production - using Vercel API endpoint:', url);
       }
       
+      console.log('Fetching news from:', url);
       let data = await fetch(url);
+      console.log('Response status:', data.status);
       
       if (data.status === 403) {
+        console.log('403 error - switching API key');
         props.switchApiKey();
         return;
+      }
+      
+      if (!data.ok) {
+        console.error('API request failed:', data.status, data.statusText);
+        const errorText = await data.text();
+        console.error('Error response:', errorText);
+        throw new Error(`HTTP ${data.status}: ${errorText}`);
       }
       
       props.setProgress(30);
 
       let parsedData = await data.json();
+      console.log('Parsed data:', parsedData);
 
       props.setProgress(60);
 
       // Add safety checks for the response data
       if (parsedData && parsedData.articles && Array.isArray(parsedData.articles)) {
+        console.log('Setting articles:', parsedData.articles.length, 'articles');
         setArticles(parsedData.articles);
         settotalArticles(parsedData.totalArticles || 0);
       } else {
-        console.error('Invalid API response:', parsedData);
+        console.error('Invalid API response structure:', parsedData);
+        // Check if it's an error response from our API
+        if (parsedData.error) {
+          console.error('API Error:', parsedData.error);
+          if (parsedData.shouldSwitchKey) {
+            props.switchApiKey();
+            return;
+          }
+        }
         setArticles([]); // Set empty array as fallback
         settotalArticles(0);
       }
