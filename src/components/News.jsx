@@ -19,25 +19,41 @@ const News = (props) => {
   const updateNews = async () => {
 
     props.setProgress(10);
-    let url = `https://gnews.io/api/v4/top-headlines?category=${props.category}&lang=en&country=${props.country}&apikey=${props.apiKey}&page=${props.page}&pageSize=${props.pgSize}`;
-    // let url = `https://gnews.io/api/v4/search?q=example&lang=en&country=${props.country}&apikey=${props.apiKey}&page=${page}&max=20`;
-    // let url =`https://newsapi.org/v2/top-headlines?country=${props.country}&category=${props.category}&apiKey=${props.apiKey}&page=1&pageSize=${props.pgSize}`;
-    let data = await fetch(url);
-    if (data.status === 403) {
-      props.switchApiKey();
-      return;
+    try {
+      let url = `https://gnews.io/api/v4/top-headlines?category=${props.category}&lang=en&country=${props.country}&apikey=${props.apiKey}&page=${props.page}&pageSize=${props.pgSize}`;
+      let data = await fetch(url);
+      
+      if (data.status === 403) {
+        props.switchApiKey();
+        return;
+      }
+      
+      props.setProgress(30);
+
+      let parsedData = await data.json();
+
+      props.setProgress(60);
+
+      // Add safety checks for the response data
+      if (parsedData && parsedData.articles && Array.isArray(parsedData.articles)) {
+        setArticles(parsedData.articles);
+        settotalArticles(parsedData.totalArticles || 0);
+      } else {
+        console.error('Invalid API response:', parsedData);
+        setArticles([]); // Set empty array as fallback
+        settotalArticles(0);
+      }
+      
+      setLoading(false);
+      props.setProgress(100);
+      
+    } catch (error) {
+      console.error('Error fetching news:', error);
+      setArticles([]); // Set empty array on error
+      settotalArticles(0);
+      setLoading(false);
+      props.setProgress(100);
     }
-    props.setProgress(30);
-
-    let parsedData = await data.json();
-
-    props.setProgress(60);
-
-    setArticles(parsedData.articles);
-    settotalArticles(parsedData.totalArticles);
-    setLoading(false);
-
-    props.setProgress(100);
   }
 
   useEffect(() => {
@@ -67,14 +83,14 @@ const News = (props) => {
 
       <h2 className="text-center " style={{ marginTop: "4rem", padding: "0.9rem 0 1rem" }}>Top Headlines - {capitalizeFirstLetter(props.category)} </h2>
       <InfiniteScroll
-        dataLength={articles.length}
+        dataLength={articles ? articles.length : 0}
         next={fetchMoreData}
-        hasMore={articles !== totalArticles}
+        hasMore={articles && articles.length !== totalArticles}
         loader={<Spinner />}
       >
         <div className="container">
           <div className="row">
-            {articles.map((element) => {
+            {articles && articles.length > 0 ? articles.map((element) => {
               return <div className="col-md-4 " key={element.url}>
                 <NewItem
                   title={element.title ? element.title.slice(0, 67) : "No title available"}
@@ -85,7 +101,11 @@ const News = (props) => {
                   source={element.source.name}
                 />
               </div>
-            })}
+            }) : (
+              <div className="col-12 text-center">
+                <p>No news articles available at the moment.</p>
+              </div>
+            )}
             <div className='fixed-bottom p-5 d-flex justify-content-end '>
               <ScrollToTop />
             </div>
