@@ -64,18 +64,31 @@ const News = (props) => {
   const fetchMoreData = async () => {
     setPage(page + 1);
 
-    let url = `https://gnews.io/api/v4/top-headlines?category=${props.category}&lang=en&country=${props.country}&apikey=${props.apiKey}&page=${page + 1}&pageSize=${props.pgSize}`;
-    let data = await fetch(url);
-    if (data.status === 403) {
-      props.switchApiKey();
-      return;
-    }
-    let parsedData = await data.json();
-    // console.log(parsedData)
+    try {
+      let url = `https://gnews.io/api/v4/top-headlines?category=${props.category}&lang=en&country=${props.country}&apikey=${props.apiKey}&page=${page + 1}&pageSize=${props.pgSize}`;
+      let data = await fetch(url);
+      
+      if (data.status === 403) {
+        props.switchApiKey();
+        return;
+      }
+      
+      let parsedData = await data.json();
 
-    setArticles(articles.concat(parsedData.articles));
-    settotalArticles(parsedData.totalArticles);
-    setLoading(false);
+      // Add safety checks for the response data
+      if (parsedData && parsedData.articles && Array.isArray(parsedData.articles)) {
+        setArticles(articles.concat(parsedData.articles));
+        settotalArticles(parsedData.totalArticles || 0);
+      } else {
+        console.error('Invalid API response in fetchMoreData:', parsedData);
+      }
+      
+      setLoading(false);
+      
+    } catch (error) {
+      console.error('Error fetching more news:', error);
+      setLoading(false);
+    }
   };
 
   return (
