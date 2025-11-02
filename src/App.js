@@ -40,13 +40,13 @@ const App=(props)=> {
         onLoaderFinished={() => setProgress(0)}
       />
           <Routes>
-            <Route exact path="/"  element={<News setProgress={setProgress}  pgSize={5} key="general" apiKey={apiKeys[currentApiKeyIndex]} country={country} category="general"  switchApiKey={switchApiKey}/>} />
-            <Route exact path="/business"  element={<News setProgress={setProgress}  pgSize={5} key="bussiness" apiKey={apiKeys[currentApiKeyIndex]} country={country} category="business"  switchApiKey={switchApiKey}/>} />
-            <Route exact path="/entertainment"  element={<News setProgress={setProgress}  pgSize={5} key="entertainment" apiKey={apiKeys[currentApiKeyIndex]} country={country} category="entertainment"  switchApiKey={switchApiKey}/>} />
-            <Route exact path="/health"  element={<News setProgress={setProgress}  pgSize={5} key="health" apiKey={apiKeys[currentApiKeyIndex]} country={country} category="health"  switchApiKey={switchApiKey}/>} />
-            <Route exact path="/science"  element={<News setProgress={setProgress}  pgSize={5} key="science" apiKey={apiKeys[currentApiKeyIndex]} country={country} category="science"  switchApiKey={switchApiKey}/>} />
-            <Route exact path="/sports"  element={<News setProgress={setProgress}  pgSize={5} key="sports" apiKey={apiKeys[currentApiKeyIndex]} country={country} category="sports" switchApiKey={switchApiKey} />}  />
-            <Route exact path="/technology"  element={<News setProgress={setProgress}  pgSize={5} key="technology" apiKey={apiKeys[currentApiKeyIndex]} country={country} category="technology"  switchApiKey={switchApiKey}/>} />
+            <Route exact path="/"  element={<News setProgress={setProgress}  pgSize={5} key="general" apiKey={apiKeys[currentApiKeyIndex]} apiKeyIndex={currentApiKeyIndex} country={country} category="general"  switchApiKey={switchApiKey}/>} />
+            <Route exact path="/business"  element={<News setProgress={setProgress}  pgSize={5} key="bussiness" apiKey={apiKeys[currentApiKeyIndex]} apiKeyIndex={currentApiKeyIndex} country={country} category="business"  switchApiKey={switchApiKey}/>} />
+            <Route exact path="/entertainment"  element={<News setProgress={setProgress}  pgSize={5} key="entertainment" apiKey={apiKeys[currentApiKeyIndex]} apiKeyIndex={currentApiKeyIndex} country={country} category="entertainment"  switchApiKey={switchApiKey}/>} />
+            <Route exact path="/health"  element={<News setProgress={setProgress}  pgSize={5} key="health" apiKey={apiKeys[currentApiKeyIndex]} apiKeyIndex={currentApiKeyIndex} country={country} category="health"  switchApiKey={switchApiKey}/>} />
+            <Route exact path="/science"  element={<News setProgress={setProgress}  pgSize={5} key="science" apiKey={apiKeys[currentApiKeyIndex]} apiKeyIndex={currentApiKeyIndex} country={country} category="science"  switchApiKey={switchApiKey}/>} />
+            <Route exact path="/sports"  element={<News setProgress={setProgress}  pgSize={5} key="sports" apiKey={apiKeys[currentApiKeyIndex]} apiKeyIndex={currentApiKeyIndex} country={country} category="sports" switchApiKey={switchApiKey} />}  />
+            <Route exact path="/technology"  element={<News setProgress={setProgress}  pgSize={5} key="technology" apiKey={apiKeys[currentApiKeyIndex]} apiKeyIndex={currentApiKeyIndex} country={country} category="technology"  switchApiKey={switchApiKey}/>} />
             <Route exact path="/about"  element={<About/>} />
           </Routes>
         </Router>

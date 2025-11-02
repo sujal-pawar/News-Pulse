@@ -20,7 +20,17 @@ const News = (props) => {
 
     props.setProgress(10);
     try {
-      let url = `https://gnews.io/api/v4/top-headlines?category=${props.category}&lang=en&country=${props.country}&apikey=${props.apiKey}&page=${props.page}&pageSize=${props.pgSize}`;
+      let url;
+      
+      // Check if we're in development (localhost) or production (Vercel)
+      if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+        // Local development - use direct GNews API
+        url = `https://gnews.io/api/v4/top-headlines?category=${props.category}&lang=en&country=${props.country}&apikey=${props.apiKey}&page=${props.page}&pageSize=${props.pgSize}`;
+      } else {
+        // Production (Vercel) - use internal API endpoint
+        url = `/api/news?category=${props.category}&country=${props.country}&page=${props.page}&pageSize=${props.pgSize}&apiKeyIndex=${props.apiKeyIndex || 0}`;
+      }
+      
       let data = await fetch(url);
       
       if (data.status === 403) {
@@ -65,7 +75,17 @@ const News = (props) => {
     setPage(page + 1);
 
     try {
-      let url = `https://gnews.io/api/v4/top-headlines?category=${props.category}&lang=en&country=${props.country}&apikey=${props.apiKey}&page=${page + 1}&pageSize=${props.pgSize}`;
+      let url;
+      
+      // Check if we're in development (localhost) or production (Vercel)
+      if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+        // Local development - use direct GNews API
+        url = `https://gnews.io/api/v4/top-headlines?category=${props.category}&lang=en&country=${props.country}&apikey=${props.apiKey}&page=${page + 1}&pageSize=${props.pgSize}`;
+      } else {
+        // Production (Vercel) - use internal API endpoint
+        url = `/api/news?category=${props.category}&country=${props.country}&page=${page + 1}&pageSize=${props.pgSize}&apiKeyIndex=${props.apiKeyIndex || 0}`;
+      }
+      
       let data = await fetch(url);
       
       if (data.status === 403) {
