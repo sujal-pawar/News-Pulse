@@ -26,19 +26,14 @@ const News = (props) => {
       if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
         // Local development - use direct GNews API
         url = `https://gnews.io/api/v4/top-headlines?category=${props.category}&lang=en&country=${props.country}&apikey=${props.apiKey}&page=${page}&pageSize=${props.pgSize}`;
-        console.log('Local development - using direct GNews API');
       } else {
         // Production (Vercel) - use internal API endpoint
         url = `/api/news?category=${props.category}&country=${props.country}&page=${page}&pageSize=${props.pgSize}&apiKeyIndex=${props.apiKeyIndex || 0}`;
-        console.log('Production - using Vercel API endpoint:', url);
       }
       
-      console.log('Fetching news from:', url);
       let data = await fetch(url);
-      console.log('Response status:', data.status);
       
       if (data.status === 403) {
-        console.log('403 error - switching API key');
         props.switchApiKey();
         return;
       }
@@ -53,13 +48,11 @@ const News = (props) => {
       props.setProgress(30);
 
       let parsedData = await data.json();
-      console.log('Parsed data:', parsedData);
 
       props.setProgress(60);
 
       // Add safety checks for the response data
       if (parsedData && parsedData.articles && Array.isArray(parsedData.articles)) {
-        console.log('Setting articles:', parsedData.articles.length, 'articles');
         setArticles(parsedData.articles);
         settotalArticles(parsedData.totalArticles || 0);
       } else {
@@ -137,36 +130,46 @@ const News = (props) => {
     <div className='container pt-10 py-4'>
 
       <h2 className="text-center " style={{ marginTop: "4rem", padding: "0.9rem 0 1rem" }}>Top Headlines - {capitalizeFirstLetter(props.category)} </h2>
-      <InfiniteScroll
-        dataLength={articles ? articles.length : 0}
-        next={fetchMoreData}
-        hasMore={articles && articles.length !== totalArticles}
-        loader={<Spinner />}
-      >
-        <div className="container">
-          <div className="row">
-            {articles && articles.length > 0 ? articles.map((element) => {
-              return <div className="col-md-4 " key={element.url}>
-                <NewItem
-                  title={element.title ? element.title.slice(0, 67) : "No title available"}
-                  description={element.description ? element.description.slice(0, 75) : "No description available"}
-                  imageUrl={element.image}
-                  newsUrl={element.url}
-                  date={element.publishedAt}
-                  source={element.source.name}
-                />
+      
+      {loading ? (
+        <div className="d-flex justify-content-center align-items-center" style={{ minHeight: "50vh" }}>
+          <Spinner />
+        </div>
+      ) : (
+        <InfiniteScroll
+          dataLength={articles ? articles.length : 0}
+          next={fetchMoreData}
+          hasMore={articles && articles.length !== totalArticles}
+          loader={<Spinner />}
+        >
+          <div className="container">
+            <div className="row">
+              {articles && articles.length > 0 ? articles.map((element) => {
+                return <div className="col-md-4 " key={element.url}>
+                  <NewItem
+                    title={element.title ? element.title.slice(0, 67) : "No title available"}
+                    description={element.description ? element.description.slice(0, 75) : "No description available"}
+                    imageUrl={element.image}
+                    newsUrl={element.url}
+                    date={element.publishedAt}
+                    source={element.source.name}
+                  />
+                </div>
+              }) : !loading ? (
+                <div className="col-12 text-center" style={{ minHeight: "30vh", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                  <div>
+                    <h4 className="text-muted">No news articles available at the moment.</h4>
+                    <p className="text-muted">Please try again later or switch to a different category.</p>
+                  </div>
+                </div>
+              ) : null}
+              <div className='fixed-bottom p-5 d-flex justify-content-end '>
+                <ScrollToTop />
               </div>
-            }) : (
-              <div className="col-12 text-center">
-                <p>No news articles available at the moment.</p>
-              </div>
-            )}
-            <div className='fixed-bottom p-5 d-flex justify-content-end '>
-              <ScrollToTop />
             </div>
           </div>
-        </div>
-      </InfiniteScroll>
+        </InfiniteScroll>
+      )}
     </div>
   )
 }
